@@ -4,7 +4,7 @@
         "browser": true,
         "node": true
     },
-    "extends": "airbnb",
+    "extends": "airbnb-base",
     "rules": {
         "no-console": "warn",
         "quotes": [

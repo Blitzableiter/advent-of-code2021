@@ -18,6 +18,8 @@
   },
   "homepage": "https://github.com/Blitzableiter/advent-of-code2021#readme",
   "devDependencies": {
-    "nodemon": "^2.0.15"
+    "eslint-config-airbnb-base": "^15.0.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-markdown": "^2.2.1"
   }
 }
