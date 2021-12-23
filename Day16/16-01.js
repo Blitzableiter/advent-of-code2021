@@ -2,12 +2,12 @@ const fs = require("fs");
 
 const startTime = new Date();
 
-const filename = "./demo.txt";
+const filename = "./input.txt";
 const messages = fs.readFileSync(filename, "utf8").split("\n").map((str) => hexToBinary(str));
 
 let sumOfVersion = 0;
 console.log(
-  evaluateTypeAndHandle(messages[4]),
+  evaluateTypeAndHandle(messages[0]),
 );
 // for (const message of messages) {
 console.log("sumOfVersion", sumOfVersion);
@@ -60,18 +60,23 @@ function evaluateOperatorPacket(packet) {
     console.log("go handle subpackets", subpackets);
     let rest = evaluateTypeAndHandle(subpackets);
     while (rest && rest.includes("1")) rest = evaluateTypeAndHandle(rest);
-  } else {
-    const numberOfSubpackets = parseInt(packet.slice(1, 12), 2);
-    console.log("numberOfSubpackets", numberOfSubpackets);
-
-    let rest = packet.slice(12);
-    let subpacketsEvaluated = 0;
-    while (rest && subpacketsEvaluated !== numberOfSubpackets) {
-      rest = evaluateTypeAndHandle(rest);
-      subpacketsEvaluated += 1;
-    }
-    if (rest && rest.includes("1")) evaluateTypeAndHandle(rest);
+    const remaining = packet.slice(16 + lengthOfSubpackets);
+    console.log("remaining", remaining);
+    return remaining;
   }
+  const numberOfSubpackets = parseInt(packet.slice(1, 12), 2);
+  console.log("numberOfSubpackets", numberOfSubpackets);
+  console.log("packet", packet);
+
+  let rest = packet.slice(12);
+  let subpacketsEvaluated = 0;
+  while (rest && subpacketsEvaluated !== numberOfSubpackets) {
+    console.log("handle subpacket", subpacketsEvaluated);
+    console.log("payload", rest);
+    rest = evaluateTypeAndHandle(rest);
+    subpacketsEvaluated += 1;
+  }
+  if (rest && rest.includes("1")) return evaluateTypeAndHandle(rest);
 }
 
 function hexToBinary(hex) {
